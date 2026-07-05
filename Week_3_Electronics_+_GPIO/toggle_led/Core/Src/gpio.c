@@ -25,20 +25,113 @@ void gpio_write(char port, uint8_t pin, gpio_state_t state){
 }
 void gpio_output_init(char port, uint8_t pin)
 {
-    /*
-     * Stub for now.
-     *
-     * PA5 / LD2 is currently initialized by CubeMX inside MX_GPIO_Init().
-     * Later, this function should:
-     * 1. Enable the GPIO port clock
-     * 2. Configure the pin mode as output
-     * 3. Set output type to push-pull
-     * 4. Set speed
-     * 5. Disable pull-up / pull-down
-     */
 
-    (void)port;
-    (void)pin;
+	GPIO_TypeDef *gpio_port;
+
+	if(port == 'A'){
+		gpio_port = GPIOA;
+		__HAL_RCC_GPIOA_CLK_ENABLE();
+	}
+	else if(port == 'B'){
+		gpio_port = GPIOB;
+		__HAL_RCC_GPIOB_CLK_ENABLE();
+
+	}
+	else if(port == 'C'){
+		gpio_port = GPIOC;
+		__HAL_RCC_GPIOC_CLK_ENABLE();
+
+	}
+	else{
+		return;
+	}
+	//configure the pin
+	uint16_t pin_mask = (uint16_t)(1 << pin);
+
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+	GPIO_InitStruct.Pin = pin_mask;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+
+	HAL_GPIO_Init(gpio_port, &GPIO_InitStruct);
+}
+
+void gpio_input_init(char port, uint8_t pin, gpio_pull_t pull){
+		GPIO_TypeDef *gpio_port;
+
+
+		if(port == 'A'){
+			gpio_port = GPIOA;
+			__HAL_RCC_GPIOA_CLK_ENABLE();
+		}
+		else if(port == 'B'){
+			gpio_port = GPIOB;
+			__HAL_RCC_GPIOB_CLK_ENABLE();
+
+		}
+		else if(port == 'C'){
+			gpio_port = GPIOC;
+			__HAL_RCC_GPIOC_CLK_ENABLE();
+
+		}
+		else{
+			return;
+		}
+		//configure the pin
+		uint16_t pin_mask = (uint16_t)(1U << pin);
+
+		GPIO_InitTypeDef GPIO_InitStruct = {0};
+		GPIO_InitStruct.Pin = pin_mask;
+
+		if (pull == GPIO_PULL_NONE){
+			GPIO_InitStruct.Pull = GPIO_NOPULL;
+		}
+		else if(pull == GPIO_PULL_UP){
+			GPIO_InitStruct.Pull = GPIO_PULLUP;
+		}
+		else{
+			GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+		}
+
+
+		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+		//GPIO_InitStruct.Pull = pull;
+
+		HAL_GPIO_Init(gpio_port, &GPIO_InitStruct);
+
+}
+gpio_state_t gpio_read(char port, uint8_t pin){
+	    GPIO_TypeDef *gpio_port;
+
+	    if (port == 'A')
+	    {
+	        gpio_port = GPIOA;
+	    }
+	    else if (port == 'B')
+	    {
+	        gpio_port = GPIOB;
+	    }
+	    else if (port == 'C')
+	    {
+	        gpio_port = GPIOC;
+	    }
+	    else
+	    {
+	        return GPIO_LOW; // temporary bad-port fallback
+	    }
+
+	    GPIO_PinState state = HAL_GPIO_ReadPin(gpio_port, (1U << pin));
+
+	    if (state == GPIO_PIN_RESET)
+	    {
+	        return GPIO_LOW;
+	    }
+	    else
+	    {
+	        return GPIO_HIGH;
+	    }
 }
 
 
