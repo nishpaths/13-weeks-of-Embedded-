@@ -1,0 +1,5 @@
+../Core/Src/traffic_light.c:22:6:traffic_light_init	8	static
+../Core/Src/traffic_light.c:28:6:set_green	8	static
+../Core/Src/traffic_light.c:33:6:set_yellow	8	static
+../Core/Src/traffic_light.c:38:6:set_red	8	static
+../Core/Src/traffic_light.c:44:6:traffic_light_update	16	static

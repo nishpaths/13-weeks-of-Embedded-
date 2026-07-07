@@ -1,0 +1,5 @@
+../Core/Src/gpio.c:11:6:gpio_toggle	16	static
+../Core/Src/gpio.c:16:6:gpio_write	24	static
+../Core/Src/gpio.c:38:6:gpio_output_init	56	static
+../Core/Src/gpio.c:73:6:gpio_input_init	56	static
+../Core/Src/gpio.c:117:14:gpio_read	24	static

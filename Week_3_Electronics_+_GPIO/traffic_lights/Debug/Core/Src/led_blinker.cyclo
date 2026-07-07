@@ -1,0 +1,2 @@
+../Core/Src/led_blinker.c:11:6:led_blinker_init	1
+../Core/Src/led_blinker.c:20:6:led_blinker_update	3
