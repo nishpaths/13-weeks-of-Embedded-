@@ -28,3 +28,6 @@ CPU returns to main → main sees flag → LED toggles
 ## Why use a flag?
 
 The interrupt callback should stay short. It just sets `event_occurred`, and `main` does the real work (toggle LED, count events, stop the timer) when it notices the flag.
+
+
+TIM6 counts in hardware. When it reaches ARR, it generates an update event. If the timer interrupt and NVIC are enabled, the CPU pauses main and runs the interrupt handler. HAL then calls the timer callback. The callback sets a volatile event flag, and main later consumes that flag and toggles the LED.
