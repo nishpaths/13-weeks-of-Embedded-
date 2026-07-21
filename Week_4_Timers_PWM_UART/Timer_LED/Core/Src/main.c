@@ -18,10 +18,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "stm32f4xx_hal_tim.h"
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdbool.h>
+#include "timer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -41,11 +44,11 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-
 TIM_HandleTypeDef htim6;
 
-/* USER CODE BEGIN PV */
 
+/* USER CODE BEGIN PV */
+volatile bool timer_event = false; 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -58,7 +61,7 @@ static void MX_TIM6_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+timer_t led_timer;
 /* USER CODE END 0 */
 
 /**
@@ -92,7 +95,9 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
-
+  uint32_t counter = 0;
+  timer_init(&led_timer, &htim6);
+  timer_start(&led_timer);
   /* USER CODE END 2 */
 
   /* Initialize leds */
@@ -107,15 +112,20 @@ int main(void)
   {
 
     /* USER CODE END WHILE */
-
     /* USER CODE BEGIN 3 */
-    HAL_TIM_Base_Start(&htim6);
-    if (__HAL_TIM_GET_FLAG(&htim6, TIM_FLAG_UPDATE) != RESET){
+    if (timer_event_occurred(&led_timer)) {
+      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_6);
+      counter++;
+    }
+    if (counter >= 10) {
+      timer_stop(&led_timer);
+    }
+    /*if (__HAL_TIM_GET_FLAG(&htim6, TIM_FLAG_UPDATE) != RESET){
 
       __HAL_TIM_CLEAR_FLAG(&htim6, TIM_FLAG_UPDATE);
       HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_6);
 
-    }
+    }*/
   }
   /* USER CODE END 3 */
 }
@@ -247,7 +257,11 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+  if(htim->Instance == TIM6){
+    timer_set_event(&led_timer);
+  }
+}
 /* USER CODE END 4 */
 
 /**
