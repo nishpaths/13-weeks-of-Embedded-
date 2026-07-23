@@ -21,8 +21,16 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdint.h>
 #include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+#include <sys/_intsup.h>
+#include "stm32f446xx.h"
+#include "stm32f4xx_hal_gpio.h"
+#include "stm32f4xx_hal_uart.h"
 #include "uart.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -63,6 +71,11 @@ static void MX_USART2_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+  #define COMMAND_SIZE 100
+  static uint8_t received_byte;
+  static char command_buffer[COMMAND_SIZE];
+  static volatile uint8_t command_index = 0;
+  static volatile bool command_ready = false;
 /* USER CODE END 0 */
 
 /**
@@ -96,9 +109,20 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  uart_t uart2;
-  uart_init(&uart2, &huart2, 1000); // Initialize UART
-  uint8_t received_byte = '8';
+  //uart_t uart2;
+  //uart_init(&uart2, &huart2, 1000); // Initialize UART
+  char message[] = "UART ready\r\n";
+  HAL_UART_Transmit(
+      &huart2,
+      (uint8_t *)message,
+      sizeof(message) - 1,
+      100
+  );
+
+  if (HAL_UART_Receive_IT(&huart2, &received_byte, 1) != HAL_OK)
+  {
+      Error_Handler();
+  }
   /* USER CODE END 2 */
 
   /* Initialize leds */
@@ -122,8 +146,9 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    HAL_StatusTypeDef status;
-    status = uart_receive_byte(&uart2, &received_byte); // Receive a byte over UART
+
+    /*HAL_StatusTypeDef status;
+    //status = uart_receive_byte(&uart2, &received_byte); // Receive a byte over UART
     if (status == HAL_OK) {
         if (received_byte == '0') { // Check if a byte was received
             HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET); // Turn off the LED if 0 was received
@@ -140,8 +165,35 @@ int main(void)
     }
     else{
       uart_send_string(&uart2, "Error receiving byte\r\n"); // Send an error message over UART
-    }
+    }*/
     
+    if(command_ready){
+      if(strcmp(command_buffer, "led on") == 0){
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
+      }
+      else if(strcmp(command_buffer, "led off") == 0){
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
+      }
+      else if(strcmp(command_buffer, "status") == 0){
+        GPIO_PinState state = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6); 
+        if (state == GPIO_PIN_RESET){
+          HAL_UART_Transmit(&huart2, (uint8_t*)"LED OFF\r\n", strlen("LED OFF"), 100);
+        }
+        else{
+          HAL_UART_Transmit(&huart2, (uint8_t*)"LED ON\r\n", strlen("LED ON"), 100);
+        }
+      }
+      else if(strcmp(command_buffer, "help") == 0){
+        HAL_UART_Transmit(&huart2, (uint8_t*)"-LED ON\r\n", strlen("-LED ON"), 100);
+        HAL_UART_Transmit(&huart2, (uint8_t*)"-LED OFF\r\n", strlen("-LED OFF"), 100);
+        HAL_UART_Transmit(&huart2, (uint8_t*)"-STATUS\r\n", strlen("-STATUS"), 100);
+      }
+      
+
+      command_index = 0;
+      command_ready = false;
+    }
+
   }
 
   /* USER CODE END 3 */
@@ -261,7 +313,24 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 
+  
+  if (huart->Instance == USART2){
+    if (received_byte == '\r' || received_byte == '\n'){
+      if(command_index > 0){
+        command_buffer[command_index] = '\0';
+        command_ready = true;
+      }
+    }
+    else if (command_ready == false && command_index < COMMAND_SIZE - 1){
+      command_buffer[command_index] = (char)received_byte;
+      command_index++;
+    }
+    
+  }
+  HAL_UART_Receive_IT(huart, &received_byte, 1);
+}
 /* USER CODE END 4 */
 
 /**
