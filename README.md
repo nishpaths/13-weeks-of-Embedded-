@@ -26,10 +26,10 @@ Philosophy: **depth > breadth**. Build independently, read datasheets, and debug
 | 3 | Electronics + GPIO | Done | `Week_3_Electronics_+_GPIO/` |
 | 4 | Timers, PWM, UART | Done | `Week_4_Timers_PWM_UART/` |
 | 5 | I2C + logic analyzer | Done | `Week_5_I2C/` |
-| 6 | SPI + sensor drivers | Done | `Week_6_SPI_Sensors/` |
+| 6 | SPI + sensor drivers | Planned | — |
 | 7 | Interrupts + debouncing | Done | `Week_7_Interrupts_Debounce/` |
 | 8 | State machines + firmware architecture | Done | `Week_8_State_Machines/` |
-| 9 | FreeRTOS basics | Done | `Week_9_FreeRTOS/` |
+| 9 | FreeRTOS basics | Planned | — |
 | 10 | PCB design (KiCad) | Planned | — |
 | 11 | Final project architecture | Planned | — |
 | 12 | Final project completion | Planned | — |
