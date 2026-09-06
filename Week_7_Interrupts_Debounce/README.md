@@ -1,7 +1,7 @@
 # Week 7 — Interrupts + Debouncing
 
 **Board:** STM32 Nucleo-F446RE  
-**Project:** `Reaction_Game/` (Cube/CMake project for Nucleo-F446RE)
+**Project:** `Reaction_Game/` (full Cube/CMake project)
 
 ## Peripherals (already wired)
 
@@ -23,3 +23,5 @@
 
 - Debounce + interrupt-driven game logic
 - `docs/architecture.md`, `docs/isr_notes.md`
+
+

@@ -1,7 +1,7 @@
 # Week 8 — State Machines + Firmware Architecture
 
 **Board:** STM32 Nucleo-F446RE  
-**Project:** `Traffic_Light_FSM/` (Cube/CMake project for Nucleo-F446RE)
+**Project:** `Traffic_Light_FSM/` (full Cube/CMake project)
 
 ## Wiring
 
@@ -24,3 +24,5 @@ Press USER anytime; the request is latched and honored after yellow.
 
 - Layered FSM (`tl_gpio` / `tl_events` / `tl_fsm`)
 - `docs/architecture.md`, `docs/state_machine.md`
+
+
