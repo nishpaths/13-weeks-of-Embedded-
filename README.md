@@ -48,6 +48,13 @@ Each week folder typically has:
 - **Architecture docs** — diagrams of layering and control flow
 - **Wiring** — pin maps for Nucleo-F446RE
 
+## How I used AI
+
+- AI helped build this roadmap for me.
+- I used ChatGPT as a tutor — to explain concepts and guide debugging — not to hand me finished code or answers.
+- I used Cursor to format my notes and clean up Markdown so everything reads more clearly.
+- I also used Cursor to commit and push changes to this repo.
+
 ## Recommended final project (Weeks 11–12)
 
 **Smart Environmental Monitor:** multiple sensors, OLED, interrupts, RTOS tasks, menu, logging — with at least one subsystem built primarily from a datasheet.
