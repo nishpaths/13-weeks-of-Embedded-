@@ -1,7 +1,7 @@
 # Week 7 — Interrupts + Debouncing
 
 **Board:** STM32 Nucleo-F446RE  
-**Project:** `Reaction_Game/` (full Cube/CMake tree)
+**Project:** `Reaction_Game/` (Cube/CMake project for Nucleo-F446RE)
 
 ## Peripherals (already wired)
 
