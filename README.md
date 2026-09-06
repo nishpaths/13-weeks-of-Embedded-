@@ -48,22 +48,6 @@ Each week folder typically has:
 - **Architecture docs** — diagrams of layering and control flow
 - **Wiring** — pin maps for Nucleo-F446RE
 
-Application modules live inside full Nucleo-F446RE Cube/CMake projects (same layout as Weeks 3–5). See [`INTEGRATION.md`](INTEGRATION.md) for open/build/flash steps — CubeMX GUI is optional.
-
-## Weeks 6–9 at a glance
-
-### Week 6 — SPI + sensor drivers
-Reusable SPI bus driver, HC-SR04 ultrasonic driver (kit sensor), layered architecture (bus → sensor → app), UART distance logging.
-
-### Week 7 — Interrupts + debouncing
-EXTI button ISR, software debounce, timer-based reaction game. Event-driven instead of `while(1) { poll(); }`.
-
-### Week 8 — State machines + firmware architecture
-Event-driven traffic light FSM with separated drivers, state logic, and application. Pedestrian request + non-blocking timers.
-
-### Week 9 — FreeRTOS basics
-Four tasks (sensor, OLED/display stub, serial log, heartbeat LED) with a queue and mutex. Focus on scheduling and synchronization, not RTOS internals.
-
 ## Recommended final project (Weeks 11–12)
 
 **Smart Environmental Monitor:** multiple sensors, OLED, interrupts, RTOS tasks, menu, logging — with at least one subsystem built primarily from a datasheet.
@@ -78,15 +62,3 @@ By the end of this roadmap you should be able to:
 - Read datasheets effectively
 - Apply basic RTOS concepts
 - Discuss engineering tradeoffs in interviews
-
-## Board defaults used in later weeks
-
-Unless a week README says otherwise:
-
-| Function | Nucleo-F446RE |
-|----------|----------------|
-| ST-Link UART | USART2 (PA2 TX / PA3 RX) |
-| User button | PC13 (active low, EXTI) |
-| LD2 (green LED) | PA5 |
-| I2C1 (OLED) | PB8 SCL / PB9 SDA |
-| SPI1 | PA5 SCK / PA6 MISO / PA7 MOSI / PA4 NSS — *conflicts with LD2; Week 6 uses alternate pins* |
