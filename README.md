@@ -51,7 +51,7 @@ Each week folder typically has:
 ## How I used AI
 
 - AI helped build this roadmap for me.
-- I used ChatGPT as a tutor — to explain concepts and guide debugging — not to hand me finished code or answers.
+- I used ChatGPT as a tutor — to explain concepts and guide debugging — not to hand me finished code or answers. I also give it the STM32 datasheet so it's easier for me to look into and see where I need to make changes whenever I'm configuring my pins.
 - I used Cursor to format my notes and clean up Markdown so everything reads more clearly.
 - I also used Cursor to commit and push changes to this repo.
 
